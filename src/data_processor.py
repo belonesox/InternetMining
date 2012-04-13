@@ -42,14 +42,24 @@ def recover_users():
     global users
     pickle_file = open("../data/users",'r')
     users = pickle.load(pickle_file)
-    pickle_file.close()   
+    pickle_file.close()
+    
+def recover_users_marks():
+    global users_marks
+    pickle_file = open("../data/users_marks",'r')
+    users_marks = pickle.load(pickle_file)
+    pickle_file.close()  
 
 def process_users():
     recover_users()
+    recover_users_marks()
     for number in users.keys():
-        users_marks[number] = parse_data(number)
-        print len(users_marks[number])
-        dump_users_marks()
+        if number in users_marks.keys(): continue
+        try:
+            users_marks[number] = parse_data(number)
+            print len(users_marks[number])
+            dump_users_marks()
+        except: print "bad user"
         
 process_users()
     
