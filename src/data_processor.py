@@ -1,5 +1,5 @@
 from BeautifulSoup import BeautifulSoup
-import pickle
+import pickle, os
 
 users = {}
 users_marks = {}
@@ -24,7 +24,7 @@ def parse_data(number):
             marks[-1].append(text)
         
     marks=marks[1:]
-    marks = [(row[0] if row[0]!='' else row[1] \
+    marks = [((row[0] if row[0]!='' else row[1]) + " " + row[2] \
               , int(row[8]) if row[8]!='-' else 0) for row in marks]
     return marks
     
@@ -34,7 +34,7 @@ def form_xls_name(number):
 
 def dump_users_marks():
     global users_marks
-    pickle_file = open("../data/users_marks",'w')
+    pickle_file = open("../data/marks/users_proceeded",'w')
     pickle.dump(users_marks, pickle_file)
     pickle_file.close()
 
@@ -46,9 +46,15 @@ def recover_users():
     
 def recover_users_marks():
     global users_marks
-    pickle_file = open("../data/users_marks",'r')
+    if not os.path.exists("../data/marks/users_proceeded"): return
+    pickle_file = open("../data/marks/users_proceeded",'r')
     users_marks = pickle.load(pickle_file)
     pickle_file.close()  
+
+def dump_users_data(number):
+    pickle_file = open("../data/marks/"+str(number),'w')
+    pickle.dump(parse_data(number), pickle_file)
+    pickle_file.close()
 
 def process_users():
     recover_users()
@@ -56,8 +62,9 @@ def process_users():
     for number in users.keys():
         if number in users_marks.keys(): continue
         try:
+            dump_users_data(number)
             users_marks[number] = parse_data(number)
-            print len(users_marks[number])
+            print len(users_marks)
             dump_users_marks()
         except: print "bad user"
         
