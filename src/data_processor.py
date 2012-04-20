@@ -2,7 +2,7 @@ from BeautifulSoup import BeautifulSoup
 import pickle, os
 
 users = {}
-users_marks = {}
+users_marks = []
 
 def parse_data(number):
     xlsname = form_xls_name(number)
@@ -59,11 +59,15 @@ def dump_users_data(number):
 def process_users():
     recover_users()
     recover_users_marks()
-    for number in users.keys():
-        if number in users_marks.keys(): continue
+    a = set(users)
+    b = set(users_marks)
+    c = a - b
+    print "Start"
+    for number in c:
+#        if number in users_marks.keys(): continue
         try:
             dump_users_data(number)
-            users_marks[number] = parse_data(number)
+            users_marks.append(number)
             print len(users_marks)
             dump_users_marks()
         except: print "bad user"
