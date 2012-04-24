@@ -1,6 +1,7 @@
 import pickle, os, copy
-
+#This is only in igraph branch
 users = []
+names = []
 matrix = [] 
 THRESHOLD = 50
 
