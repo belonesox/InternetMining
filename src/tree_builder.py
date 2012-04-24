@@ -1,8 +1,9 @@
 import pickle, os, copy
 #This is only in igraph branch
 users = []
-names = []
-matrix = [] 
+names = [1,2,3,4]
+
+matrix = []
 THRESHOLD = 50
 
 def init_matrix(size):
