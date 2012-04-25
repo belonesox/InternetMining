@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pickle, os, copy , igraph
 from multiprocessing import Pool
 
@@ -9,7 +10,7 @@ THRESHOLD = 50
 
 def init_graph(size):
     global graph
-    graph = igraph.add_verties(size-1)
+    graph = graph.add_vertices(size-1)
 
 def load_users_data(number):
     pickle_file = open("../data/marks/"+str(number),'r')
@@ -110,13 +111,13 @@ def add_edge(first,second,data):
         edgeCount +=16
         edge = []
              
-def compare_users(first_user,second_user):
-    if first_user <= second_user: continue
+def compare_users(first_user,second_user,first_data):
+    if first_user <= second_user: return
     try:
         second_data = prepare_data(load_users_data(users[second_user]))
-        if len(second_data[0])<THRESHOLD: continue
-        add_edge(first_user,second_user,calculate_difference(first_data, second_data)
-        except: print "bad user"
+        if len(second_data[0])<THRESHOLD: return
+        add_edge(first_user,second_user,calculate_difference(first_data, second_data))
+    except: print "bad user"
         
 def push_last_edges():
     global edges
@@ -141,13 +142,13 @@ def start():
         print first_user
         p = Pool(processes=4)
         second_user = 0
-        while < len(users)):
+        while (second_user < len(users)):
             if second_user+3 < len(users):
                 # Если это не последние 3 пользователя, то обрабатываем их параллельно 
                 p.map_async(compare_users,[(first_user,second_user),(first_user,second_user+1),(first_user,second_user+2),(first_user,second_user+3)])
                 second_user += 4
                 continue
-            compare_users(first_user,second_user)
+            compare_users(first_user,second_user,first_data)
             second_user += 1
     #Поскольку записываем только по 16 рёбер, могут остаться недозаписанные рёбра
     push_last_edges()    
