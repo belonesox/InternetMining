@@ -47,6 +47,22 @@ def dump_matrix():
     pickle_file = open("../data/tree_matrix",'w')
     pickle.dump(matrix, pickle_file)
     pickle_file.close()
+    
+    
+def delete_bad_users():
+    global users
+    recover_users()
+    new_users = []
+    for user in users:
+        try: data = prepare_data(load_users_data(user))
+        except: continue
+        if len(data[0])<THRESHOLD: continue
+        new_users.append(user)
+    users = new_users
+    print len(users)
+    pickle_file = open("../data/marks/users_proceeded_fixed", 'w')
+    pickle.dump(users, pickle_file)
+    pickle_file.close()
 
 def start():
     recover_users()
@@ -68,5 +84,4 @@ def start():
     dump_matrix()
     
 
-            
 start()
