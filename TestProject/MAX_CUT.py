@@ -51,6 +51,7 @@ def Max_CUT():
 		users[index_to_change][index_to_change] = (-1)*users[index_to_change][index_to_change]
 	
 Max_CUT()
+
 #Random_CUT()
 print("First group:")
 for i in range(NUMBER):
